@@ -1,0 +1,12 @@
+# Version ranges for broad compatibility
+# Use this for development on newer platforms (Python 3.11+, ARM)
+
+streamlit>=1.30.0,<2.0.0
+pandas>=2.0.3,<3.0.0
+numpy>=1.24.4,<2.0.0
+scipy>=1.10.1,<2.0.0
+plotly>=5.14.0,<6.0.0
+jinja2>=3.0.0,<4.0.0
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+ruff>=0.1.0,<1.0.0

@@ -1,0 +1,12 @@
+# Exact pins for deterministic reproducibility
+# Generated via: pip freeze > requirements-lock.txt
+# Tested on Python 3.8.10 (Ubuntu 22.04 x86_64)
+#            Python 3.10.11 (Windows 10 x86_64, macOS 13 Intel)
+
+streamlit==1.30.0
+pandas==2.0.3
+numpy==1.24.4
+scipy==1.10.1
+pytest==7.4.3
+pytest-cov==4.1.0
+ruff==0.1.6

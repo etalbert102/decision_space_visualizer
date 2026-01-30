@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.8', '3.10']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-lock.txt
+
+    - name: Verify pinned versions (Python script)
+      run: |
+        python -c "
+        import sys
+
+        # Read requirements
+        with open('requirements-lock.txt') as f:
+            req = {}
+            for line in f:
+                if '==' in line:
+                    pkg, ver = line.strip().split('==')
+                    req[pkg] = ver
+
+        # Check installed versions
+        import subprocess
+        result = subprocess.run([sys.executable, '-m', 'pip', 'list', '--format=freeze'],
+                                capture_output=True, text=True)
+
+        for line in result.stdout.splitlines():
+            if '==' in line:
+                pkg, ver = line.strip().split('==')
+                if pkg in req:
+                    assert ver == req[pkg], f'Version mismatch: {pkg} (expected {req[pkg]}, got {ver})'
+
+        print('All pinned versions match')
+        "
+
+    - name: Lint with ruff
+      run: |
+        ruff check src/ tests/ scripts/
+
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ -v --cov=src --cov-report=term --cov-report=xml
+      env:
+        CI: true
+
+    - name: Check coverage threshold
+      run: |
+        python -c "import xml.etree.ElementTree as ET; tree = ET.parse('coverage.xml'); root = tree.getroot(); coverage = float(root.attrib['line-rate']) * 100; print(f'Coverage: {coverage:.1f}%'); assert coverage >= 75.0, f'Coverage {coverage:.1f}% below 75% threshold'"
+
+    - name: Run validation script
+      run: |
+        python scripts/validate_distribution.py
+
+    - name: Upload coverage reports
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10'
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
