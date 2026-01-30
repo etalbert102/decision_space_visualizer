@@ -94,8 +94,8 @@ Callouts show where option loss occurs: below threshold, eligible but dropped by
 **One-time setup**:
 ```bash
 # Clone repository
-git clone https://github.com/etalbert102/decision_space.git
-cd decision_space
+git clone https://github.com/etalbert102/decision_space_visualizer.git
+cd decision_space_visualizer
 
 # Create virtual environment
 python -m venv venv
@@ -261,7 +261,7 @@ If you use this tool in research or presentations:
 ```
 Decision Space Visualizer (2026)
 A diagnostic tool for option loss under constraints in ML-assisted decision systems
-https://github.com/etalbert102/decision_space
+https://github.com/etalbert102/decision_space_visualizer
 ```
 
 
