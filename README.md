@@ -5,7 +5,21 @@ It informs threshold selection, review budget sizing, and top-K choice in constr
 
 A diagnostic tool that shows **which options a model removed before human review** -- and how constraints quietly collapse choice.
 
+This project is an applied exploration of judgment-preserving system design. Many decision systems silently remove options through thresholds, rankings, or capacity constraints before a human ever sees them, creating the appearance of choice while collapsing the true decision space. The Decision Space Visualizer makes these hidden boundaries explicit by separating scoring from constraint application and surfacing which candidates are excluded — and why. It is intentionally scoped as a local, no-commit diagnostic tool using synthetic data, designed to test how judgment can be preserved when automation is used to structure decisions rather than replace them.
+
 ---
+## Doctrine → Code Map
+
+This repository applies a judgment-preserving design doctrine by making decision boundaries,
+constraints, and option loss explicit. Key doctrine elements map to the codebase as follows:
+
+| Doctrine concept | Where it appears in this repo | Why it matters |
+|-----------------|--------------------------------|----------------|
+| Decision boundary | `src/constraints.py: apply_constraints` | Separates scoring from constraint enforcement so option loss is explicit and inspectable |
+| Judgment anchor | Streamlit UI parameters (`app.py` sidebar) | Makes constraint choices explicit and user-controlled rather than implicit defaults |
+| Option visibility | UI tables + charts (`app.py`) | Surfaces which candidates were never seen by a human |
+| Invariants | Assertions and tests in `src/constraints.py` and `tests/` | Ensures partitions are correct and prevents silent option loss |
+| Reproducibility | Fixed seeds + parameterized runs | Allows inspection and comparison of decision-space collapse under different constraints |
 
 ## The Problem
 
@@ -77,11 +91,11 @@ Inputs and outputs:
 
 ---
 
-## Annotated Default Screenshot
+## Default Screenshot
 
 ![Annotated default run](docs/default_screenshot.png)
 
-Callouts show where option loss occurs: below threshold, eligible but dropped by capacity, and shown to human.
+Shows where option loss occurs: below threshold, eligible but dropped by capacity, and shown to human.
 
 ---
 
