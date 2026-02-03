@@ -10,7 +10,6 @@ Performance target: < 2s for UI updates after caching
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 from typing import Dict, List, Optional, Any, Tuple
 from src.data import generate_candidates
 from src.model import score_candidates
