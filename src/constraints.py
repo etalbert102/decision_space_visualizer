@@ -20,7 +20,7 @@ UI Semantics (UPDATED):
 """
 
 import pandas as pd
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 
 def compute_boundary_items(

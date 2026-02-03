@@ -11,14 +11,13 @@ Validates:
 """
 
 import sys
-sys.path.insert(0, '.')
-
-from src.data import generate_candidates
-from src.model import score_candidates, MODEL_COEFS
-from src.constraints import apply_constraints
 
 def validate_score_distribution():
     """Validate actual implementation creates good demo dynamics."""
+    sys.path.insert(0, '.')
+    from src.data import generate_candidates
+    from src.model import score_candidates, MODEL_COEFS
+    from src.constraints import apply_constraints
 
     print("="*60)
     print("FULL PIPELINE VALIDATION (Phases 1-3)")
